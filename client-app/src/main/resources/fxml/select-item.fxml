@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import ru.apolyakov.client_app.widget.SelectItemWidget?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<SelectItemWidget xmlns="http://javafx.com/javafx"
+                  xmlns:fx="http://javafx.com/fxml"
+                  style="-fx-background-color: transparent; -fx-border-color: black">
+    <children>
+        <Label fx:id="title" text="VideoCalls App" textFill="#000000" prefHeight="25.0" prefWidth="140.0"
+               maxHeight="150.0" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity"
+               style="-fx-background-color: #dddddd" wrapText="true">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+
+        <Circle fx:id="closeItem" fill="#fa4771" layoutX="16.0" layoutY="24.0"
+                radius="5.0" stroke="#fa4771" strokeType="INSIDE"/>
+    </children>
+</SelectItemWidget>
