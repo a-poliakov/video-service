@@ -99,7 +99,12 @@ public class MainController  extends AbstractWindowController{
             appStage.setY(event12.getScreenY() - yOffset);
         });
 
-        Scene scene = new Scene(mainViewParent);
+        Scene scene;
+        if (mainViewParent.getScene() == null) {
+            scene = new Scene(mainViewParent);
+        } else {
+            scene = mainViewParent.getScene();
+        }
         appStage.setScene(scene);
         appStage.show();
     }

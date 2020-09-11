@@ -2,14 +2,20 @@ package ru.apolyakov.client_app.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import ru.apolyakov.client_app.config.ControllersConfiguration;
 import ru.apolyakov.client_app.model.UserDto;
 import ru.apolyakov.client_app.service.VideoCaptureService;
 import ru.apolyakov.client_app.widget.MultiSelectList;
@@ -30,9 +36,18 @@ public class CreateCallController extends AbstractWindowController {
     private MultiSelectList<UserDto> userDtoMultiSelectList;
 
     @Autowired
-    private VideoCaptureService videoCaptureService;
-    @Autowired
     private UserListDataProvider userListDataProvider;
+
+    @Autowired
+    @Qualifier("mainView")
+    private ControllersConfiguration.ViewHolder mainView;
+
+    @Autowired
+    @Qualifier("callView")
+    private ControllersConfiguration.ViewHolder callView;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
 
 
     @FXML
@@ -88,6 +103,53 @@ public class CreateCallController extends AbstractWindowController {
     }
 
     public void call(MouseEvent mouseEvent) {
+        Parent mainViewParent = callView.getParent();
 
+        CallSessionController callViewController = (CallSessionController) callView.getController();
+        callViewController.startCameraCapture();
+
+        //Parent mainViewParent = FXMLLoader.load(getClass().getResource("fxml/pin.fxml"));
+        Stage appStage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        mainViewParent.setOnMousePressed(event1 -> {
+            xOffset = event1.getSceneX();
+            yOffset = event1.getSceneY();
+        });
+        mainViewParent.setOnMouseDragged(event12 -> {
+            appStage.setX(event12.getScreenX() - xOffset);
+            appStage.setY(event12.getScreenY() - yOffset);
+        });
+
+        Scene scene;
+        if (mainViewParent.getScene() == null) {
+            scene = new Scene(mainViewParent);
+        } else {
+            scene = mainViewParent.getScene();
+        }
+        appStage.setScene(scene);
+        appStage.show();
+    }
+
+    public void back(MouseEvent mouseEvent) {
+        Parent mainViewParent = mainView.getParent();
+
+        //Parent mainViewParent = FXMLLoader.load(getClass().getResource("fxml/pin.fxml"));
+        Stage appStage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        mainViewParent.setOnMousePressed(event1 -> {
+            xOffset = event1.getSceneX();
+            yOffset = event1.getSceneY();
+        });
+        mainViewParent.setOnMouseDragged(event12 -> {
+            appStage.setX(event12.getScreenX() - xOffset);
+            appStage.setY(event12.getScreenY() - yOffset);
+        });
+
+        Scene scene;
+        if (mainViewParent.getScene() == null) {
+            scene = new Scene(mainViewParent);
+        } else {
+            scene = mainViewParent.getScene();
+        }
+        appStage.setScene(scene);
+        appStage.show();
     }
 }

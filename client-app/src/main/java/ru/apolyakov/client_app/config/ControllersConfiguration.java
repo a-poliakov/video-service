@@ -29,7 +29,7 @@ public class ControllersConfiguration {
 
     @Bean(name = "callView")
     public ViewHolder callView() throws IOException {
-        return loadView("fxml/create_call.fxml");
+        return loadView("fxml/call_session.fxml");
     }
 
     @Bean(name = "createCallView")
@@ -50,10 +50,10 @@ public class ControllersConfiguration {
         return (LoginController) authView.getController();
     }
 
-//    @Bean
-//    public CallSessionController callSessionController(@Qualifier("callView") ViewHolder callView) throws IOException {
-//        return (CallSessionController) callView.getController();
-//    }
+    @Bean
+    public CallSessionController callSessionController(@Qualifier("callView") ViewHolder callView) throws IOException {
+        return (CallSessionController) callView.getController();
+    }
 
     @Bean
     public CreateCallController createCallController(@Qualifier("createCallView") ViewHolder createCallView) throws IOException {

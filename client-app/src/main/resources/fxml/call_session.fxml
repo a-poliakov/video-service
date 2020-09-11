@@ -22,6 +22,19 @@
                         </BorderPane.margin></ImageView>
             </children>
         </AnchorPane>
+
+        <AnchorPane layoutY="419.0" onMouseClicked="#stopCall" prefHeight="48.0" prefWidth="310.0"
+                    style="-fx-background-color: red;">
+            <children>
+                <Label fx:id="stop_btn" layoutX="133.0" layoutY="11.0" prefHeight="17.0" prefWidth="45.0"
+                       text="Stop/leave call" textFill="black">
+                    <font>
+                        <Font size="17.0"/>
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+
         <AnchorPane prefHeight="48.0" prefWidth="310.0" style="-fx-background-color: #2e354f;">
             <children>
                 <Label layoutX="131.0" layoutY="14.0" text="VideoCalls App" textFill="#8c90b3">

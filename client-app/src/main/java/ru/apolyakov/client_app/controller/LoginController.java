@@ -36,10 +36,6 @@ public class LoginController extends AbstractWindowController{
     @Qualifier("mainView")
     private ControllersConfiguration.ViewHolder mainView;
 
-    @Autowired
-    @Qualifier("createCallView")
-    private ControllersConfiguration.ViewHolder createCallView;
-
     @FXML
     ImageView ic;
     @FXML
@@ -89,7 +85,7 @@ public class LoginController extends AbstractWindowController{
             log.error("Error while SignIn: {}", e.getMessage());
             return;
         }
-        Parent mainViewParent = createCallView.getParent();
+        Parent mainViewParent = mainView.getParent();
 
         //Parent mainViewParent = FXMLLoader.load(getClass().getResource("fxml/pin.fxml"));
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

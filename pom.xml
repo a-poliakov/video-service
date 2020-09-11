@@ -20,6 +20,10 @@
         <module>client-app</module>
         <module>configuration-service</module>
         <module>gateway-service</module>
+        <module>call-consumer-service</module>
+        <module>video-processor-service</module>
+        <module>calls-service</module>
+        <module>call-restream-service</module>
     </modules>
 
     <properties>

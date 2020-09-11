@@ -26,3 +26,7 @@ hs_err_pid*
 /client-app/target/
 /configuration-service/target/
 /gateway-service/target/
+/call-consumer-service/target/
+/call-restream-service/target/
+/calls-service/target/
+/video-processor-service/target/
