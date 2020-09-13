@@ -1,0 +1,34 @@
+# Use root/example as user/password credentials
+version: '3.4'
+
+services:
+  consul:
+    image: consul:1.1.0
+    hostname: localhost
+    networks:
+      - lan
+    ports:
+      - 8500:8500
+
+  postgres:
+    image: postgres:11.0
+    hostname: localhost
+    networks:
+      - lan
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: root
+      POSTGRES_DB: video_calls
+
+  browserless:
+    image: browserless/chrome
+    hostname: localhost
+    networks:
+      - lan
+    ports:
+      - 3000:3000
+
+networks:
+  lan:
