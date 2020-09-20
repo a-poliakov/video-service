@@ -53,8 +53,6 @@ public class VideoProcessorServiceConfiguration {
         stringObjectBuilder.put("cluster.service.type", clusterNodeProperties.getServiceType());
         stringObjectBuilder.put("ignite.thread-pool.service.size", threadPoolProperties.getServiceSize());
         stringObjectBuilder.put("ignite.thread-pool.public.size", threadPoolProperties.getPublicSize());
-        stringObjectBuilder.put("ignite.thread-pool.command-query.size", threadPoolProperties.getCommandQuerySize());
-        stringObjectBuilder.put("ignite.thread-pool.dep.size", threadPoolProperties.getPublicSize());
         stringObjectBuilder.build();
         return stringObjectBuilder.build();
     }

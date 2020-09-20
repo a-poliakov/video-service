@@ -12,5 +12,6 @@ public interface Constants {
 
     interface Services {
         String VIDEO_BUFFER_CACHE_SERVICE = "video_buffer_cache_svc";
+        String CALL_SID_TO_CALL_OPTIONS_CACHE_SERVICE = "call_sid_to_call_options_cache_svc";
     }
 }

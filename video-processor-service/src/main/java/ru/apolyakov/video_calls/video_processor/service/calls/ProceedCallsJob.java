@@ -1,0 +1,17 @@
+package ru.apolyakov.video_calls.video_processor.service.calls;
+
+import org.quartz.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@DisallowConcurrentExecution
+public class ProceedCallsJob implements Job {
+    private static final Logger log = LoggerFactory.getLogger(ProceedCallsJob.class);
+
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap();
+        ProceedCallsService proceedCallsService = (ProceedCallsService) jobDataMap.get("proceedCallsService");
+        proceedCallsService.proceedCalls();
+    }
+}
