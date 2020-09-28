@@ -11,7 +11,7 @@ public class ProceedCallsJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap();
-        ProceedCallsService proceedCallsService = (ProceedCallsService) jobDataMap.get("proceedCallsService");
+        ProceedCallsServiceImpl proceedCallsService = (ProceedCallsServiceImpl) jobDataMap.get("proceedCallsService");
         proceedCallsService.proceedCalls();
     }
 }

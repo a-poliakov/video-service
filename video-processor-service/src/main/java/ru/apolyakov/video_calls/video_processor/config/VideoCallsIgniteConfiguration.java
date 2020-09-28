@@ -38,7 +38,7 @@ public class VideoCallsIgniteConfiguration extends IgniteConfiguration {
     }
 
     @Bean
-    IgniteNameFilter filter(ClusterNodeProperties clusterNodeProperties){
+    IgniteNameFilter filter(ClusterNodeProperties clusterNodeProperties) {
         log.info("Service type={}, service id={}",
                 clusterNodeProperties.getServiceType(),
                 clusterNodeProperties.getServiceId());
@@ -114,8 +114,6 @@ public class VideoCallsIgniteConfiguration extends IgniteConfiguration {
     public IgniteConfiguration setIgniteInstanceName(@Value("${cluster.service.type}") String serviceType) {
         return super.setIgniteInstanceName(serviceType);
     }
-
-
 
     @Autowired
     @Override

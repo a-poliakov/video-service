@@ -1,32 +1,40 @@
 package ru.apolyakov.video_calls.video_processor.service.calls;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ignite.resources.SpringResource;
+import org.apache.ignite.resources.SpringApplicationContextResource;
 import org.apache.ignite.services.Service;
 import org.apache.ignite.services.ServiceContext;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+import org.springframework.context.ApplicationContext;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 @Slf4j
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProceedCallSchedulerService implements Service {
     private static final long serialVersionUID = -8757303444436397237L;
 
 //    @SpringResource(resourceName = "replyServiceConfig")
 //    private transient ReplyServiceConfig config;
+
+    @SpringApplicationContextResource
+    private ApplicationContext applicationContext;
 //
-    @SpringResource(resourceName = "proceedCallsService")
-    private transient ProceedCallsService proceedCallsService;
+//    @SpringResource(resourceName = "proceedCallsServiceImpl")
+    private transient ProceedCallsServiceImpl proceedCallsService;
 //
 //    @SpringResource(resourceName = "errorReply")
 //    private transient ErrorReply errorReply;
 
-    private Scheduler scheduler;
+    private transient Scheduler scheduler;
 
     @Override
     public void cancel(ServiceContext serviceContext) {
@@ -40,6 +48,9 @@ public class ProceedCallSchedulerService implements Service {
 
     @Override
     public void init(ServiceContext serviceContext) throws Exception {
+        ProceedCallsServiceImpl proceedCallsService = applicationContext.getBean("proceedCallsServiceImpl", ProceedCallsServiceImpl.class);
+        this.proceedCallsService = proceedCallsService;
+
         scheduler = StdSchedulerFactory.getDefaultScheduler();
         scheduler.start();
 

@@ -11,19 +11,30 @@ import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.ExecutorConfiguration;
 import org.apache.ignite.events.EventType;
 import org.apache.ignite.logger.slf4j.Slf4jLogger;
+import org.apache.ignite.services.ServiceConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import ru.apolyakov.video_calls.video_processor.Constants;
 import ru.apolyakov.video_calls.video_processor.config.properties.ClusterNodeProperties;
 import ru.apolyakov.video_calls.video_processor.config.properties.ThreadPoolProperties;
+import ru.apolyakov.video_calls.video_processor.service.caches.call_options.CallOptionsCacheService;
+import ru.apolyakov.video_calls.video_processor.service.caches.video_frames.VideoFramesCacheService;
+import ru.apolyakov.video_calls.video_processor.service.calls.ProceedCallSchedulerService;
 
 import java.util.Map;
 
+import static ru.apolyakov.video_calls.video_processor.Constants.Services.*;
+
 @Slf4j
 @Configuration
+@ComponentScan("ru.apolyakov.video_calls.video_processor")
 public class VideoProcessorServiceConfiguration {
     @Getter
     private IgniteNameFilter igniteNameFilter;
@@ -57,10 +68,11 @@ public class VideoProcessorServiceConfiguration {
         return stringObjectBuilder.build();
     }
 
-    @Bean
-    Ignite ignite(VideoCallsIgniteConfiguration igniteConfiguration,
-                  IgniteNameFilter igniteNameFilter,
-                  CacheConfiguration[] cacheConfigurations) throws IgniteCheckedException {
+    @Bean("ignite")
+    Ignite ignite(
+            VideoCallsIgniteConfiguration igniteConfiguration,
+            IgniteNameFilter igniteNameFilter,
+            CacheConfiguration[] cacheConfigurations) throws IgniteCheckedException {
         this.igniteNameFilter = igniteNameFilter;
         igniteConfiguration.setCacheConfiguration(cacheConfigurations);
         Ignite ignite = IgniteSpring.start(igniteConfiguration, applicationContext);
@@ -74,5 +86,33 @@ public class VideoProcessorServiceConfiguration {
         ExecutorConfiguration executorConfiguration = new ExecutorConfiguration(Constants.ExecConfiguration.DEPENDENT_TASK_EXECUTOR);
         executorConfiguration.setSize(poolSize);
         return executorConfiguration;
+    }
+
+    @EventListener
+    public void onContextStarted(ApplicationReadyEvent event) {
+        ignite.services().deploy(new ServiceConfiguration()
+                .setName(CALL_SID_TO_CALL_OPTIONS_CACHE_SERVICE)
+                .setNodeFilter(igniteNameFilter)
+                .setMaxPerNodeCount(1)
+                .setService(new CallOptionsCacheService()));
+        log.info("{} configuration deployed", CALL_SID_TO_CALL_OPTIONS_CACHE_SERVICE);
+
+        ignite.services().deploy(new ServiceConfiguration()
+                .setName(VIDEO_BUFFER_CACHE_SERVICE)
+                .setNodeFilter(igniteNameFilter)
+                .setMaxPerNodeCount(1)
+                .setService(new VideoFramesCacheService()));
+        log.info("{} configuration deployed", VIDEO_BUFFER_CACHE_SERVICE);
+
+        ConfigurableApplicationContext context = event.getApplicationContext();
+        Ignite ignite = context.getBean(Ignite.class);
+
+        ignite.services().deploy(new ServiceConfiguration()
+                .setName(PROCEED_CALL_SCHEDULER_SERVICE)
+                .setNodeFilter(igniteNameFilter)
+                .setMaxPerNodeCount(1)
+                .setTotalCount(1)
+                .setService(new ProceedCallSchedulerService()));
+        log.info("{} configuration deployed", PROCEED_CALL_SCHEDULER_SERVICE);
     }
 }

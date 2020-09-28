@@ -36,3 +36,8 @@ ignite:
       mode: TRANSACTIONAL
     backup:
       factor: 2
+
+processor:
+  recognize:
+    face:
+      absolute-face-size: 0
